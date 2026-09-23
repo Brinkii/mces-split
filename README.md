@@ -80,7 +80,7 @@ train_idx, test_idx, val_idx = splitter.fractional_split(train=0.8, test=0.1, va
 | `linkage` | Linkage criterion for agglomerative clustering. `single` guarantees no cross-split pair falls below the threshold. |
 | `alpha` (`max_size_ratio`) | If set, uses a constrained clustering that caps cluster size relative to the dataset, preventing one giant cluster from making balanced splits impossible. |
 
-|`fractional_split` Produces `train`, `val` and `test` splits for given fraction (e.g. 80/10/10). |
+| `fractional_split` Produces `train`, `val` and `test` splits for given fraction (e.g. 80/10/10). |
 
 ## License
 
