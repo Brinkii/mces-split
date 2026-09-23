@@ -1,15 +1,7 @@
-import h5py
-import pandas as pd
 import numpy as np
-
-from sklearn.cluster import AgglomerativeClustering
-from sklearn.model_selection import GroupKFold,StratifiedGroupKFold
+from sklearn.model_selection import GroupKFold
 from utils.customAgglomerativeClustering import CustomAgglomerativeClustering
-
 from utils.chem import load_mces_distance_matrix
-import logging
-
-logger = logging.getLogger(__name__)
 
 class   MCESSplit:
     def __init__(self, n_splits=5, cluster_mces_threshold=10, linkage="single",
@@ -30,18 +22,9 @@ class   MCESSplit:
         self.dists_smiles = dists_smiles
         self.dists_smiles_lookup = dists_smiles_lookup
 
-    def restrict_to_smiles(self, keep_smiles, logger=None, dataset_name=""):
+    def restrict_to_smiles(self, keep_smiles, dataset_name=""):
         keep_set = set(keep_smiles)
         keep_idx = [i for i, s in enumerate(self.dists_smiles) if s in keep_set]
-        dropped = [s for s in self.dists_smiles if s not in keep_set]
-
-        if dropped:
-            msg = (
-                f"{dataset_name}: restricting dists matrix — {len(dropped)} SMILES "
-                f"from HDF5 not present in cleaned CSV, dropping them: {dropped[:5]}"
-                f"{' ...' if len(dropped) > 5 else ''}"
-            )
-            (logger.warning if logger else print)(msg)
 
         if len(keep_idx) == len(self.dists_smiles):
             return 
@@ -111,19 +94,13 @@ class   MCESSplit:
             self.linkage = linkage
         if cluster_mces_threshold is not None:
             self.cluster_mces_threshold = cluster_mces_threshold
-        self.max_size_ratio = max_size_ratio
-        if self.max_size_ratio is not None:
-            clustering = CustomAgglomerativeClustering(
+        if max_size_ratio is not None:
+            self.max_size_ratio = max_size_ratio
+        
+        clustering = CustomAgglomerativeClustering(
                 metric='precomputed',
                 linkage=self.linkage,
                 distance_threshold=self.cluster_mces_threshold,
                 max_size_ratio=self.max_size_ratio
             ).fit(self.dists)                    
-        else:
-            clustering = AgglomerativeClustering(
-                metric='precomputed',
-                linkage=self.linkage,
-                distance_threshold=self.cluster_mces_threshold,
-                n_clusters=None
-            ).fit(self.dists)
         return np.array(clustering.labels_)
