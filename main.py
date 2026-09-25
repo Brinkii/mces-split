@@ -5,8 +5,6 @@ from split_mces import MCESSplit
 import os
 import pandas as pd
 
-#TODO adjust pathing and use std instead of _new
-
 ALL_DATASETS_REG = ["delaney","freesolv","lipo"]
 ALL_DATASETS_CLASS = ["tox21", "sider", "toxcast", "hiv","clintox", "bbbp", "bace"]
 
