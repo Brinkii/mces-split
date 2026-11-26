@@ -1,10 +1,8 @@
 # MCES-Split: Reliable evaluation for small molecule machine learning
 
-This repository contains the code accompanying the ICLR 2027 submission **"Reliable evaluation for small molecule machine learning"**.
+This repository contains the code accompanying **"Reliable evaluation for small molecule machine learning"**.
 
 It provides a splitting procedure that keeps structurally similar molecules out of the train/test boundary. Molecules are clustered by agglomerative clustering on precomputed pairwise **MCES (Maximum Common Edge Subgraph) distances**. Whole clusters are then assigned to folds or partitions, so no cluster spans train and test.
-
-> **Note:** This is an anonymized version for peer review. A full release will follow after the review process.
 
 ---
 
@@ -36,8 +34,6 @@ The splitter expects, for each dataset:
 
 1. A cleaned CSV of molecules (SMILES column: `smiles_std`).
 2. An HDF5 file with the precomputed pairwise MCES distance matrix and the corresponding SMILES.
-
-Bace and FreeSolv are examplatroy and addional files will be downloadable after de-anonymization.
 
 If the HDF5 contains SMILES that are missing from the cleaned CSV, they are dropped automatically with a warning (`MCESSplit.restrict_to_smiles`).
 
